@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\UserController;
 
 // Route ke login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
@@ -47,10 +48,21 @@ Route::middleware('auth')
     });
 
 // Transaksi
-Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
-Route::post('/transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
-Route::put('/transaksi/{id}/batal', [TransaksiController::class, 'batal'])->name('transaksi.batal');
-Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
+Route::middleware('auth')
+    ->prefix('transaksi')
+    ->name('transaksi.')
+    ->group(function () {
+        Route::get('/', [TransaksiController::class, 'index'])->name('index');
+        Route::post('/', [TransaksiController::class, 'store'])->name('store');
+        Route::put('/{id}/batal', [TransaksiController::class, 'batal'])->name('batal');
+        Route::delete('/{id}', [TransaksiController::class, 'destroy'])->name('destroy');
+    });
+
+// Users
+Route::middleware('auth')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+});
 
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

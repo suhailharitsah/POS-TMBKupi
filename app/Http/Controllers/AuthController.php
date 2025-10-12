@@ -28,9 +28,11 @@ class AuthController extends Controller
       return redirect()->intended(route('dashboard'));
     }
 
-    return back()->withErrors([
-      'email' => 'Email atau password salah.',
-    ])->onlyInput('email');
+    return back()
+      ->withErrors([
+        'email' => 'Email atau password salah.',
+      ])
+      ->onlyInput('email');
   }
 
   // Tampilkan halaman register
@@ -43,20 +45,18 @@ class AuthController extends Controller
   public function register(Request $request)
   {
     $request->validate([
-      'name' => ['required', 'string', 'max:255'],
-      'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-      'password' => ['required', 'string', 'min:6', 'confirmed'],
+      'name' => 'required|string|max:255',
+      'email' => 'required|email|unique:users',
+      'password' => 'required|confirmed|min:6',
     ]);
 
-    $user = User::create([
+    \App\Models\User::create([
       'name' => $request->name,
       'email' => $request->email,
-      'password' => Hash::make($request->password),
+      'password' => bcrypt($request->password),
     ]);
 
-    Auth::login($user);
-
-    return redirect()->route('dashboard');
+    return back()->with('success', 'Akun berhasil didaftarkan! Silakan login terlebih dahulu.');
   }
 
   // Logout

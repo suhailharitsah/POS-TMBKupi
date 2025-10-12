@@ -44,8 +44,9 @@
         <x-transaksi.cart-sidebar />
       </div>
 
-      {{-- Riwayat Transaksi --}}
-      <x-transaksi.riwayat-transaksi :transaksis="$transaksis" />
+      {{-- resources/views/transaksi/index.blade.php --}}
+      <x-transaksi.riwayat-transaksi :produks="$produks" :transaksis="$transaksis" :bulan="$bulan" :tahun="$tahun"
+        :periode="$periode" :totalBulanIni="$totalBulanIni" />
 
     </div>
   </div>
@@ -126,12 +127,12 @@
                 Swal.fire({
                   title: "Pembayaran Berhasil! 🎉",
                   html: `
-                <div class="text-lg mt-3">
-                  <div>Tanggal: <strong>${new Date().toLocaleString("id-ID")}</strong></div>
-                  <div>Total: <strong class="text-green-600">${this.formatRupiah(this.total)}</strong></div>
-                  <div>Bayar: <strong>${this.formatRupiah(this.bayarNominal)}</strong></div>
-                  <div>Kembali: <strong class="text-blue-600">${this.formatRupiah(this.kembali)}</strong></div>
-                </div>`,
+                  <div class="text-lg mt-3">
+                    <div>Tanggal: <strong>${new Date().toLocaleString("id-ID")}</strong></div>
+                    <div>Total: <strong class="text-green-600">${this.formatRupiah(this.total)}</strong></div>
+                    <div>Bayar: <strong>${this.formatRupiah(this.bayarNominal)}</strong></div>
+                    <div>Kembali: <strong class="text-blue-600">${this.formatRupiah(this.kembali)}</strong></div>
+                  </div>`,
                   icon: "success",
                   confirmButtonColor: "#10B981"
                 }).then(() => {
@@ -162,8 +163,11 @@
         }
       }
 
-      // SweetAlert untuk tombol Hapus (saja)
+      // ========================================
+      // Event Listener untuk DOMContentLoaded
+      // ========================================
       document.addEventListener("DOMContentLoaded", function() {
+        // SweetAlert konfirmasi hapus
         document.querySelectorAll('.hapus-btn').forEach(function(button) {
           button.addEventListener('click', function(e) {
             e.preventDefault();
@@ -180,14 +184,13 @@
               cancelButtonText: 'Batal'
             }).then((result) => {
               if (result.isConfirmed) {
-                // submit form (server side will delete and set flash message)
                 form.submit();
               }
             });
           });
         });
 
-        // Setelah reload: tampilkan alert sukses jika ada flash message dari server
+        // Alert sukses setelah reload
         @if (session('success'))
           Swal.fire({
             title: "Berhasil!",
@@ -196,12 +199,27 @@
             confirmButtonColor: "#10B981"
           });
         @endif
+
+        if (document.getElementById("filterTanggal")) {
+          flatpickr("#filterTanggal", {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "l, d F Y",
+            locale: "id",
+            allowInput: true,
+            rangeSeparator: " to ",
+            defaultDate: "{{ request('tanggal') }}",
+            monthSelectorType: "static",
+            onReady: function(selectedDates, dateStr, instance) {
+              instance.altInput.classList.add("text-white");
+            }
+          });
+        }
+
       });
     </script>
   @endpush
-
-
-
 
 
 @endsection
