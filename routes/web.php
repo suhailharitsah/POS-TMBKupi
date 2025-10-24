@@ -6,6 +6,7 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EmployeeController;
 
 // Route ke login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
@@ -58,11 +59,33 @@ Route::middleware('auth')
         Route::delete('/{id}', [TransaksiController::class, 'destroy'])->name('destroy');
     });
 
+//Laporan
+
+// Employee
+Route::middleware('auth')
+    ->prefix('employee')
+    ->name('employee.')
+    ->group(function () {
+        Route::get('/', [EmployeeController::class, 'index'])->name('index');
+        Route::get('/create', [EmployeeController::class, 'create'])->name('create');
+        Route::post('/', [EmployeeController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [EmployeeController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [EmployeeController::class, 'update'])->name('update');
+        Route::delete('/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
+    });
+
 // Users
-Route::middleware('auth')->group(function () {
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-});
+Route::middleware('auth')
+    ->prefix('users')
+    ->name('users.')
+    ->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+    });
 
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
