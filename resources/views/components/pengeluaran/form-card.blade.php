@@ -5,7 +5,12 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
           </div>
-          <h2 class="text-xl font-semibold text-gray-800">Tambah Pengeluaran Baru</h2>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-indigo-500">
+              Tambah Pengeluaran Baru</h2>
+            <p class="ml-1 text-indigo-500/80 font-medium text-sm">Isi data dibawah untuk menambahkan pengeluaran hari
+              ini</p>
+          </div>
         </div>
 
         <form action="{{ route('master.pengeluaran.store') }}" method="POST"

@@ -8,18 +8,19 @@ use App\Models\Employee;
 class EmployeeController extends Controller
 {
   /**
-   * Tampilkan daftar karyawan.
+   * 🔹 Tampilkan daftar karyawan (dengan pagination)
    */
-  public function index()
+  public function index(Request $request)
   {
-    // Ambil semua data karyawan dari database
-    $employees = Employee::orderBy('nama')->get();
+    // Ambil 10 data per halaman, bisa ubah jadi 5/15/20 sesuai kebutuhan
+    $employees = Employee::orderBy('nama', 'asc')->paginate(10);
 
+    // Kirim data + query string agar pagination tetap konsisten saat ada filter
     return view('employee.index', compact('employees'));
   }
 
   /**
-   * Tampilkan form tambah karyawan.
+   * 🔹 Form tambah karyawan
    */
   public function create()
   {
@@ -27,64 +28,61 @@ class EmployeeController extends Controller
   }
 
   /**
-   * Simpan data karyawan baru.
+   * 🔹 Simpan karyawan baru
    */
   public function store(Request $request)
   {
-    $request->validate([
-      'nama' => 'required|string|max:100',
-      'jabatan' => 'required|string|max:50',
-      'telepon' => 'required|string|max:20',
+    $validated = $request->validate([
+      'nama' => ['required', 'string', 'max:100'],
+      'jabatan' => ['required', 'string', 'max:50'],
+      'telepon' => ['required', 'string', 'max:20'],
     ]);
 
-    Employee::create([
-      'nama' => $request->nama,
-      'jabatan' => $request->jabatan,
-      'telepon' => $request->telepon,
-    ]);
+    Employee::create($validated);
 
-    return redirect()->route('employee.index')->with('success', 'Karyawan baru berhasil ditambahkan!');
+    return redirect()
+      ->route('employee.index')
+      ->with('success', '✅ Karyawan baru berhasil ditambahkan!');
   }
 
   /**
-   * Tampilkan form edit karyawan.
+   * 🔹 Edit data karyawan
    */
   public function edit($id)
   {
     $employee = Employee::findOrFail($id);
-
     return view('employee.edit', compact('employee'));
   }
 
   /**
-   * Update data karyawan.
+   * 🔹 Update data
    */
   public function update(Request $request, $id)
   {
-    $request->validate([
-      'nama' => 'required|string|max:100',
-      'jabatan' => 'required|string|max:50',
-      'telepon' => 'required|string|max:20',
+    $validated = $request->validate([
+      'nama' => ['required', 'string', 'max:100'],
+      'jabatan' => ['required', 'string', 'max:50'],
+      'telepon' => ['required', 'string', 'max:20'],
     ]);
 
     $employee = Employee::findOrFail($id);
-    $employee->update([
-      'nama' => $request->nama,
-      'jabatan' => $request->jabatan,
-      'telepon' => $request->telepon,
-    ]);
+    $employee->update($validated);
 
-    return redirect()->route('employee.index')->with('success', 'Data karyawan berhasil diperbarui!');
+    return redirect()
+      ->route('employee.index')
+      ->with('success', '✏️ Data karyawan berhasil diperbarui!');
   }
 
   /**
-   * Hapus data karyawan.
+   * 🔹 Hapus data
    */
   public function destroy($id)
   {
     $employee = Employee::findOrFail($id);
     $employee->delete();
 
-    return redirect()->route('employee.index')->with('success', 'Data karyawan berhasil dihapus!');
+    return redirect()
+      ->route('employee.index')
+      ->with('success', '🗑️ Data karyawan berhasil dihapus!');
   }
 }
