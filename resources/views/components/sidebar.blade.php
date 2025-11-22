@@ -48,7 +48,8 @@
           <span class="iconify" data-icon="solar:cart-3-bold-duotone" data-width="20"></span>
           Transaksi
         </a>
-        <a href="#" class="flex items-center px-2 py-2 text-base font-medium hover:bg-gray-700 rounded-md gap-3">
+        <a href="{{ route('laporan.index') }}"
+          class="flex items-center px-2 py-2 text-base font-medium hover:bg-gray-700 rounded-md gap-3">
           <span class="iconify" data-icon="solar:clipboard-bold-duotone" data-width="20"></span>
           Laporan
         </a>
@@ -102,12 +103,13 @@
     </a>
 
     {{-- Laporan --}}
-    <a href="#"
+    <a href="{{ route('laporan.index') }}"
       class="flex items-center gap-3 px-4 py-2 mx-2 rounded-lg font-medium
-        {{ request()->is('#') ? 'bg-blue-100 text-blue-700' : 'text-white hover:bg-gray-50 hover:text-gray-900' }}">
+        {{ request()->routeIs('laporan.index') || request()->routeIs('laporan.penjualan') ? 'bg-blue-100 text-blue-700' : 'text-white hover:bg-gray-50 hover:text-gray-900' }}">
       <span class="iconify" data-icon="solar:clipboard-bold-duotone" data-width="20"></span>
       Laporan
     </a>
+
 
     {{-- Karyawan --}}
     <a href="{{ route('employee.index') }}"

@@ -7,7 +7,8 @@ use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmployeeController;
-
+use App\Http\Controllers\LaporanPenjualanController;
+use App\Http\Controllers\LaporanController;
 // Route ke login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -59,8 +60,6 @@ Route::middleware('auth')
         Route::delete('/{id}', [TransaksiController::class, 'destroy'])->name('destroy');
     });
 
-//Laporan
-
 // Employee
 Route::middleware('auth')
     ->prefix('employee')
@@ -85,6 +84,15 @@ Route::middleware('auth')
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
         Route::put('/{id}', [UserController::class, 'update'])->name('update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+    });
+
+// Laporan
+Route::middleware('auth')
+    ->prefix('laporan')
+    ->name('laporan.')
+    ->group(function () {
+        Route::get('/', [LaporanController::class, 'index'])->name('index');
+        Route::get('/penjualan', [LaporanPenjualanController::class, 'index'])->name('penjualan');
     });
 
 // Logout

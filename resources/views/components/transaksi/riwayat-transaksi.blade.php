@@ -44,26 +44,57 @@
 
         {{-- 🔹 Dropdown Periode Bulan --}}
         <div class="relative" x-data="{ open: false }">
+          @php
+            // Ambil bulan & tahun aktif dari request (default ke 'semua')
+            $bulanAktif = request('bulan', 'semua');
+            $tahunAktif = request('tahun');
+
+            // Tentukan label dropdown berdasarkan kondisi
+            if ($bulanAktif === 'semua') {
+                $labelDropdown = '📅 Semua Transaksi';
+            } else {
+                $labelDropdown = \Carbon\Carbon::create($tahunAktif ?? now()->year, $bulanAktif)->translatedFormat(
+                    'F Y',
+                );
+            }
+
+            // Pastikan 'semua' muncul di urutan pertama
+            $periode = $periode->sortBy(function ($item) {
+                return $item->bulan === 'semua' ? 0 : 1;
+            });
+          @endphp
+
+          {{-- 🔹 Tombol dropdown --}}
           <button @click="open = !open"
             class="bg-white/30 text-white text-sm px-4 py-3 rounded-2xl hover:bg-white/40 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-200 flex items-center gap-2 whitespace-nowrap">
-            {{ request('bulan') == 'semua' ? 'Semua Transaksi' : \Carbon\Carbon::create(request('tahun', now()->year), request('bulan', now()->month))->translatedFormat('F Y') }}
-            <svg class="w-4 h-4" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor"
-              viewBox="0 0 24 24">
+            {{ $labelDropdown }}
+            <svg class="w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': open }"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
 
+          {{-- 🔹 Menu dropdown --}}
           <div x-show="open" @click.outside="open = false" x-transition
             class="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-200 z-50 overflow-hidden">
+
             @foreach ($periode as $p)
+              @php
+                $isActive =
+                    ($bulanAktif == $p->bulan && $tahunAktif == $p->tahun) ||
+                    ($bulanAktif == 'semua' && $p->bulan == 'semua');
+              @endphp
+
               <a href="{{ route('transaksi.index', ['bulan' => $p->bulan, 'tahun' => $p->tahun]) }}"
                 @click="open = false"
-                class="block px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-150">
+                class="block px-4 py-3 transition-colors duration-150
+          {{ $isActive ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-700' }}">
                 {{ $p->bulan === 'semua' ? '📅 Semua Transaksi' : \Carbon\Carbon::create($p->tahun, $p->bulan)->translatedFormat('F Y') }}
               </a>
             @endforeach
           </div>
         </div>
+
 
       </div>
     </div>
