@@ -131,7 +131,7 @@
     <div class="flex items-center gap-3">
       <img src="https://i.pravatar.cc/40" alt="avatar" class="w-8 h-8 rounded-full">
       <div>
-        <p class="font-semibold">Super Admin</p>
+        <p class="font-semibold">Supervisor</p>
         <p class="text-xs text-gray-400">Admin Kasir</p>
       </div>
     </div>

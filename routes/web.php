@@ -5,10 +5,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LaporanPenjualanController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\VendorController;
 // Route ke login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -25,28 +27,23 @@ Route::get('/dashboard', function () {
     ->name('dashboard');
 
 // Master
-Route::prefix('master')
-    ->middleware('auth')
-    ->group(function () {
-        Route::view('/', 'master.index')->name('master.index');
-        Route::view('/produk', 'master.produk.index')->name('master.produk.index');
-        Route::view('/pelanggan', 'master.pelanggan.index')->name('master.pelanggan.index');
-    });
-
-// Master Produk
 Route::middleware('auth')
     ->prefix('master')
     ->name('master.')
     ->group(function () {
+        Route::view('/', 'master.index')->name('index');
+
+        Route::view('/produk', 'master.produk.index')->name('produk.index');
+        Route::view('/pelanggan', 'master.pelanggan.index')->name('pelanggan.index');
+
         Route::resource('produk', ProdukController::class)->except(['create', 'edit', 'show']);
-    });
-
-// Master Pengeluaran
-Route::middleware('auth')
-    ->prefix('master')
-    ->name('master.')
-    ->group(function () {
         Route::resource('pengeluaran', PengeluaranController::class)->except(['create', 'show']);
+
+        // Stok Produk
+        Route::get('/stok', [StokController::class, 'index'])->name('stok.index');
+
+        // 🔹 Vendor
+        Route::resource('vendor', VendorController::class)->except(['show']);
     });
 
 // Transaksi

@@ -21,20 +21,32 @@
         <p class="text-sm text-gray-500">Kelola daftar produk.</p>
       </a>
 
+      <a href="{{ route('master.stok.index') }}"
+        class="p-5 bg-white rounded-2xl shadow transition-all duration-300 flex flex-col gap-3 hover:shadow-xl hover:-translate-y-1 hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100">
+
+        <span class="iconify text-purple-500 group-hover:scale-110 transition-transform"
+          data-icon="solar:box-bold-duotone" data-width="32"></span>
+
+        <h3 class="font-semibold text-gray-700">Stok Produk</h3>
+        <p class="text-sm text-gray-500">Pantau Stok Produk.</p>
+      </a>
+
+      <a href="{{ route('master.vendor.index') }}"
+        class="p-5 bg-white rounded-2xl shadow transition-all duration-300 flex flex-col gap-3 hover:shadow-xl hover:-translate-y-1 hover:bg-gradient-to-br hover:from-yellow-50 hover:to-yellow-100">
+
+        <span class="iconify text-yellow-500 group-hover:scale-110 transition-transform"
+          data-icon="solar:shop-bold-duotone" data-width="32"></span>
+
+        <h3 class="font-semibold text-gray-700">Vendor</h3>
+        <p class="text-sm text-gray-500">Kelola vendor & pemasok barang titipan.</p>
+      </a>
+
       <a href="{{ route('master.pengeluaran.index') }}"
         class="p-5 bg-white rounded-2xl shadow transition-all duration-300 flex flex-col gap-3 hover:shadow-xl hover:-translate-y-1 hover:bg-gradient-to-br hover:from-red-50 hover:to-red-100">
         <span class="iconify text-red-500 group-hover:scale-110 transition-transform"
           data-icon="solar:clipboard-remove-bold-duotone" data-width="32"></span>
         <h3 class="font-semibold text-gray-700">Pengeluaran</h3>
         <p class="text-sm text-gray-500">Kelola kas dan pengeluaran.</p>
-      </a>
-
-      <a href="#"
-        class="p-5 bg-white rounded-2xl shadow transition-all duration-300 flex flex-col gap-3 hover:shadow-xl hover:-translate-y-1 hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100">
-        <span class="iconify text-purple-500 group-hover:scale-110 transition-transform"
-          data-icon="solar:users-group-two-rounded-bold-duotone" data-width="32"></span>
-        <h3 class="font-semibold text-gray-700">Pelanggan</h3>
-        <p class="text-sm text-gray-500">Kelola data pelanggan.</p>
       </a>
     </div>
 
