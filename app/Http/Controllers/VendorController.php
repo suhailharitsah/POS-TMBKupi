@@ -10,32 +10,45 @@ class VendorController extends Controller
   public function index()
   {
     $vendors = Vendor::orderBy('nama')->paginate(10);
-
     return view('master.vendor.index', compact('vendors'));
+  }
+
+  public function create()
+  {
+    return view('master.vendor.create');
   }
 
   public function store(Request $request)
   {
     $validated = $request->validate([
-      'nama' => 'required|string|max:255',
+      'nama'   => 'required|string|max:255',
       'kontak' => 'nullable|string|max:255',
     ]);
 
     Vendor::create($validated);
 
-    return redirect()->route('master.vendor.index')->with('success', 'Vendor berhasil ditambahkan.');
+    return redirect()
+      ->route('master.vendor.index')
+      ->with('success', 'Vendor berhasil ditambahkan.');
+  }
+
+  public function edit(Vendor $vendor)
+  {
+    return view('master.vendor.edit', compact('vendor'));
   }
 
   public function update(Request $request, Vendor $vendor)
   {
     $validated = $request->validate([
-      'nama' => 'required|string|max:255',
+      'nama'   => 'required|string|max:255',
       'kontak' => 'nullable|string|max:255',
     ]);
 
     $vendor->update($validated);
 
-    return redirect()->route('master.vendor.index')->with('success', 'Vendor berhasil diperbarui.');
+    return redirect()
+      ->route('master.vendor.index')
+      ->with('success', 'Vendor berhasil diperbarui.');
   }
 
   public function destroy(Vendor $vendor)
@@ -46,6 +59,8 @@ class VendorController extends Controller
 
     $vendor->delete();
 
-    return redirect()->route('master.vendor.index')->with('success', 'Vendor berhasil dihapus.');
+    return redirect()
+      ->route('master.vendor.index')
+      ->with('success', 'Vendor berhasil dihapus.');
   }
 }

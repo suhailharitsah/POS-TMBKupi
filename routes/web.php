@@ -33,16 +33,20 @@ Route::middleware('auth')
     ->group(function () {
         Route::view('/', 'master.index')->name('index');
 
+        // Produk
         Route::view('/produk', 'master.produk.index')->name('produk.index');
+        Route::resource('produk', ProdukController::class)->except(['create', 'edit', 'show']);
+
+        // Pelanggan
         Route::view('/pelanggan', 'master.pelanggan.index')->name('pelanggan.index');
 
-        Route::resource('produk', ProdukController::class)->except(['create', 'edit', 'show']);
+        // Pengeluaran
         Route::resource('pengeluaran', PengeluaranController::class)->except(['create', 'show']);
 
         // Stok Produk
         Route::get('/stok', [StokController::class, 'index'])->name('stok.index');
 
-        // 🔹 Vendor
+        // 🔹 VENDOR
         Route::resource('vendor', VendorController::class)->except(['show']);
     });
 
